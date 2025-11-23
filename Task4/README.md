@@ -25,13 +25,13 @@
 ## Create users
 
 ```bash
-./create-user.sh admin1 app-admins
-./create-user.sh devops1 devops
-./create-user.sh developer1 developers
-./create-user.sh tester1 qa
-./create-user.sh svc-ci-account1 ci-systems
-./create-user.sh support1 support-level2
-./create-user.sh netadmin1 netops
+./01_create_user.sh admin1 app-admins
+./01_create_user.sh devops1 devops
+./01_create_user.sh developer1 developers
+./01_create_user.sh tester1 qa
+./01_create_user.sh svc-ci-account1 ci-systems
+./01_create_user.sh support1 support-level2
+./01_create_user.sh netadmin1 netops
 ```
 
 ## Create roles
@@ -42,4 +42,17 @@ kubectl apply -f ./02_roles.yml
 ## Create bindings
 ```bash
 kubectl apply -f ./03_bindings.yml
+```
+
+## Проверка
+
+Авторизоватся под одним из созданных юзеров:
+```bash
+export KUBECONFIG=./users/netadmin1-kubeconfig
+kubectl auth can-i --list
+```
+
+Откатить проверку так:
+```bash
+unset KUBECONFIG
 ```

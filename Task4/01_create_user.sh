@@ -6,7 +6,7 @@ set -e
 
 USER=$1
 GROUP=$2
-OUT_DIR="users"
+OUT_DIR="./users"
 
 if [ -z "$USER" ] || [ -z "$GROUP" ]; then
   echo "Usage: ./create-minikube-user.sh <username> <group>"

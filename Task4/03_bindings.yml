@@ -26,7 +26,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: ns-contributor-binding
-  namespace: your-namespace
+  namespace: dev-namespace-1
 roleRef:
   kind: Role
   name: namespace-contributor
@@ -41,7 +41,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: ci-pipeline-binding
-  namespace: ci
+  namespace: dev-namespace-1
 roleRef:
   kind: Role
   name: ci-pipeline
