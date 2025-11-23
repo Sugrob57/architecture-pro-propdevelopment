@@ -1,0 +1,25 @@
+@startuml ProDevelopment.C4.Context
+!include C4_Context.puml
+
+Person(client, "Собственник", "Собственник жилья, или жилец")
+
+System_Boundary(smartHome, "Система умного дома от партнера") {
+  System_Ext(biometry, "Сервис биометрии", "Распознавание лиц для домофона")
+  System_Ext(autoscanner, "Сервис распознавания номеров", "Распознование номера автомобиля")
+}
+
+System_Boundary(proDev, "PropDevelopment") {
+  System(mobileApp, "Мобильное приложение для собственников", "Управление сервисами ЖКХ и устройствами умного дома")
+  System(proBackend, "API Gateway", "Сервисные интеграции с партнерами")
+}
+
+System_Ext(iot, "IoT-шлюзы/устройства дома", "Домофон, камера, шлагбаум")
+
+
+Rel(client, mobileApp, "Пользуется")
+Rel(iot, biometry, "Видеопоток с домофона")
+Rel(biometry, proBackend, "Верификация лица")
+Rel(autoscanner, proBackend, "Проверка номера авто")
+Rel(iot, autoscanner, "Видеопоток с камер шлагбаума")
+
+@enduml
