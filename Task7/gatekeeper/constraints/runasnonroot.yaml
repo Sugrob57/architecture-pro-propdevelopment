@@ -1,0 +1,7 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredSecurity
+metadata:
+  name: require-secure-context
+spec:
+  match:
+    namespaces: ["audit-zone"]

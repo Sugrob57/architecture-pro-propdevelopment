@@ -1,0 +1,40 @@
+@startuml ProDevelopment.C4.Container
+!include C4_Container.puml
+
+Person(client, "Собственник", "Собственник жилья, или жилец")
+
+System_Boundary(smartHome, "Система умного дома от партнера") {
+  System_Ext(smartApi, "API Gateway", "Точка входа для интеграций")
+  System_Ext(smartBackend, "BAckendApp", "Backend сервисы для систем умного дома")
+  System_Ext(biometry, "Сервис биометрии", "Распознавание лиц для домофона")
+  System_Ext(autoscanner, "Сервис распознавания номеров", "Распознование номера автомобиля")
+}
+
+System_Boundary(proDev, "Группа сервисов ЖКУ") {
+  Container(mobileApp, "Витрина сервисов для собственников", "MobileApp(iOS, Android)", "Мобильное приложение для собственников")
+  Container(tenant_GW, "tenant-core-app", "Kotlin, SpringBoot", "Приложение для предоставления услуг собственникам")
+ Container(auth_service_1, "auth-service-1", "Keycloak", "Сервис аутентификации пользователй")
+  ContainerDb(datahub, "tenant-core-db", "PostgreSQL", "База данных услуг ЖКХ по собственникам")
+}
+
+
+System_Ext(iot, "IoT-шлюзы/устройства дома", "Домофон, камера, шлагбаум, контроллеры")
+
+
+
+Rel(client, mobileApp, "Пользуется")
+Rel(mobileApp, auth_service_1, "Авторизация", "REST")
+Rel(mobileApp, tenant_GW, "Управление услугами, девайсами", "REST, WS")
+Rel(tenant_GW, datahub, "Данные собственников", "JDBC")
+Rel(auth_service_1, tenant_GW, "Проверка JWT/интроспекция", "OIDC")
+
+Rel(smartApi, iot, "Команды/телеметрия", "протоколы IoT")
+Rel(smartApi, smartBackend, "Управление устройствами", "REST")
+Rel(biometry, smartBackend, "Верификация лица", "REST")
+Rel(autoscanner, smartBackend, "Проверка номера авто", "REST")
+Rel(smartApi, tenant_GW, "События: вызов домофона, распознавание", "HTTPS webhooks + подпись")
+
+
+Rel(iot, smartApi, "Видеопоток домофона (через мобильное SDK/URL)", "TLS")
+
+@enduml
